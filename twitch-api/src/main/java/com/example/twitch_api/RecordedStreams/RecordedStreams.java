@@ -29,4 +29,57 @@ public class RecordedStreams {
     private String VideoGame;
 
     private Instant TimeStreamed;
+
+    private String ThumbnailUrl;
+
+    public RecordedStreams(String twitchStreamId, String title, String streamUrl, String hostUsername, Number viewCount, String game, Instant timeStreamed, String thumbnailUrl) {
+        TwitchStreamId = twitchStreamId;
+        StreamTitle = title;
+        StreamUrl = streamUrl;
+        StreamHostUsername = hostUsername;
+        ViewCount = viewCount;
+        VideoGame = game;
+        TimeStreamed = timeStreamed;
+        ThumbnailUrl = thumbnailUrl;
+    }
+
+    public UUID getRecordedStreamsId() {
+        return this.RecordedStreamId;
+    }
+
+    public String getTwitchStreamId() {
+        return this.TwitchStreamId;
+    }
+
+    public String getStreamTitle() {
+        return this.StreamTitle;
+    }
+
+    public String getStreamUrl() {
+        return this.StreamUrl;
+    }
+
+    public String getStreamHostUsername() {
+        return this.StreamHostUsername;
+    }
+
+    public Number getViewCount() {
+        return this.ViewCount;
+    }
+
+    public void setViewCount(Number viewCount) {
+        this.ViewCount = viewCount;
+    }
+
+    public String getVideoGame() {
+        return this.VideoGame;
+    }
+
+    public Instant getTimeStreamed() {
+        return this.TimeStreamed;
+    }
+
+    public String getThumbnailUrl() {
+        return this.ThumbnailUrl;
+    }
 }
