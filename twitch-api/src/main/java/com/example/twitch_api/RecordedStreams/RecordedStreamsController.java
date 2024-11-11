@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/recordedStreams")
 public class RecordedStreamsController {
     @Autowired
     private RecordedStreamsRepository _recordedStreamsRepository;
@@ -29,7 +29,7 @@ public class RecordedStreamsController {
         RecordedStreams recordedStream = _recordedStreamsRepository.findByRecordedStreamId(streamId);
 
         if (recordedStream == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(recordedStream);
     }
@@ -39,7 +39,7 @@ public class RecordedStreamsController {
         RecordedStreams recordedStream = _recordedStreamsRepository.findByTwitchStreamId(twitchStreamId);
 
         if (recordedStream == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(recordedStream);
     }
@@ -49,7 +49,7 @@ public class RecordedStreamsController {
         RecordedStreams recordedStream = _recordedStreamsRepository.findByStreamTitle(streamTitle);
 
         if (recordedStream == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(recordedStream);
     }
@@ -63,54 +63,62 @@ public class RecordedStreamsController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
-            RecordedStreams videoStream = new RecordedStreams(reqBody.get("twitchStreamId").toString(), reqBody.get("title").toString(), reqBody.get("streamUrl").toString(), reqBody.get("hostUsername").toString(), Integer.parseInt(reqBody.get("viewCount").toString()), reqBody.get("game").toString(), Instant.parse(reqBody.get("timeStreamed").toString()), reqBody.get("thumbnailUrl").toString());
+            RecordedStreams videoStream = new RecordedStreams(
+                    reqBody.get("twitchStreamId").toString(),
+                    reqBody.get("title").toString(),
+                    reqBody.get("streamUrl").toString(),
+                    reqBody.get("hostUsername").toString(),
+                    Integer.parseInt(reqBody.get("viewCount").toString()),
+                    reqBody.get("game").toString(),
+                    Instant.parse(reqBody.get("timeStreamed").toString()),
+                    reqBody.get("thumbnailUrl").toString()
+            );
 
             _recordedStreamsRepository.save(videoStream);
 
-            return ResponseEntity.status(HttpStatus.OK).body(videoStream);
+            return ResponseEntity.status(HttpStatus.CREATED).body(videoStream);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @PutMapping("/viewCount/{streamId}")
-    public ResponseEntity updateViewCount(@PathVariable String streamId) {
+    public ResponseEntity<?> updateViewCount(@PathVariable String streamId) {
         try {
             var sId = UUID.fromString(streamId);
 
             RecordedStreams recordedStream = _recordedStreamsRepository.findByRecordedStreamId(sId);
 
             if (recordedStream == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
-            Integer ct = (Integer) recordedStream.getViewCount();
-            recordedStream.setViewCount((Number) (ct + 1));
+            recordedStream.setViewCount(recordedStream.getViewCount().intValue() + 1);
 
             _recordedStreamsRepository.save(recordedStream);
 
             return ResponseEntity.status(HttpStatus.OK).body(null);
-        }  catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating view count.");
         }
     }
 
     @DeleteMapping("/{streamId}")
-    public ResponseEntity deleteRecordedStream(@PathVariable String streamId) {
+    public ResponseEntity<?> deleteRecordedStream(@PathVariable String streamId) {
         try {
             var sId = UUID.fromString(streamId);
 
             RecordedStreams recordedStream = _recordedStreamsRepository.findByRecordedStreamId(sId);
 
             if (recordedStream == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Stream not found.");
             }
 
             _recordedStreamsRepository.delete(recordedStream);
 
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }  catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting the stream.");
         }
     }
 }

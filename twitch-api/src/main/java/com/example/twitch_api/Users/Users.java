@@ -6,7 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.Id;
+
 
 import jakarta.persistence.Entity;
 
@@ -14,7 +15,7 @@ import jakarta.persistence.Entity;
 @Table(name = "Users")
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID UserId;
 
     private String username;
