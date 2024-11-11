@@ -21,8 +21,10 @@ public class UsersController {
     private UserRepository _userRepository;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Users> getUserByUserId(@PathVariable UUID userId) {
-        Users curr = _userRepository.findByUserId(userId);
+    public ResponseEntity<Users> getUserByUserId(@PathVariable String userId) {
+        var uId = UUID.fromString(userId);
+
+        Users curr = _userRepository.findByUserId(uId);
         if (curr == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(curr);
         }
@@ -67,9 +69,11 @@ public class UsersController {
     }
 
     @DeleteMapping("/{userId}") 
-    public ResponseEntity deleteUser(@PathVariable UUID userId) {
+    public ResponseEntity deleteUser(@PathVariable String userId) {
         try {
-            Users currUser = _userRepository.findByUserId(userId);
+            var uId = UUID.fromString(userId);
+
+            Users currUser = _userRepository.findByUserId(uId);
 
             if (currUser == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
