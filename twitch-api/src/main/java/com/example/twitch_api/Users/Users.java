@@ -6,17 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 
-import jakarta.persistence.Id;
-
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 @Table(name = "Users")
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID UserId;
+    private UUID userId;
 
     private String username;
 
@@ -34,7 +32,7 @@ public class Users {
     }
 
     public UUID getUserId() {
-        return this.UserId;
+        return this.userId;
     }
 
     public String getUsername() {

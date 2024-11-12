@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class RecordedStreams {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID RecordedStreamId;
+    private UUID recordedStreamId;
 
     private String TwitchStreamId;
 
@@ -44,7 +44,7 @@ public class RecordedStreams {
     }
 
     public UUID getRecordedStreamsId() {
-        return this.RecordedStreamId;
+        return this.recordedStreamId;
     }
 
     public String getTwitchStreamId() {
