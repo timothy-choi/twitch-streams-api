@@ -1,4 +1,4 @@
-package com.example.twitch_api.RecordedStreams;
+package com.example.twitch_streams_api.demo.RecordedStreams;
 
 import java.util.UUID;
 
