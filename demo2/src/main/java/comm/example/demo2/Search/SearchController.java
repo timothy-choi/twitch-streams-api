@@ -5,23 +5,19 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.meilisearch.sdk.Client;
-import com.meilisearch.sdk.SearchRequest;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.meilisearch.sdk.model.SearchResult;
+import com.meilisearch.sdk.Client;
+import com.meilisearch.sdk.SearchRequest;
+import com.meilisearch.sdk.exceptions.MeilisearchApiException;
 import com.meilisearch.sdk.model.Searchable;
 
 
@@ -123,12 +119,32 @@ public class SearchController {
     }
 
     @DeleteMapping("/users/{userEntryId}")
-    public ResponseEntity deleteUserEntry(@RequestParam String userEntryId) {
-        
+    public ResponseEntity deleteUserEntry(@PathVariable String userEntryId) {
+        try {
+            meiliSearchClient.index("users").deleteDocument(userEntryId);
+
+            return ResponseEntity.status(200).body(null);
+        } catch (MeilisearchApiException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error deleting user entry: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Unexpected error occurred: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/recordedStreams/{recordedStreamsEntryId}")
     public ResponseEntity deleteRecordedStreamsEntry(@RequestParam String recordedStreamsEntryId) {
-        
+        try {
+            meiliSearchClient.index("recordedStreams").deleteDocument(recordedStreamsEntryId);
+
+            return ResponseEntity.status(200).body(null);
+        } catch (MeilisearchApiException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error deleting user entry: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Unexpected error occurred: " + e.getMessage());
+        }
     }
 }
