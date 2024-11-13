@@ -92,12 +92,34 @@ public class SearchController {
 
     @PostMapping("/users")
     public ResponseEntity addUserEntry(@RequestBody Map<String, Object> reqBody) {
-        
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String jsonDocument = objectMapper.writeValueAsString(reqBody);
+
+            meiliSearchClient.index("users").addDocuments(jsonDocument);
+
+            return ResponseEntity.status(201).body(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @PostMapping("/recordedStreams")
     public ResponseEntity addRecordedStreamEntry(@RequestBody Map<String, Object> reqBody) {
-        
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String jsonDocument = objectMapper.writeValueAsString(reqBody);
+
+            meiliSearchClient.index("recordedStreams").addDocuments(jsonDocument);
+
+            return ResponseEntity.status(201).body(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @DeleteMapping("/users/{userEntryId}")
