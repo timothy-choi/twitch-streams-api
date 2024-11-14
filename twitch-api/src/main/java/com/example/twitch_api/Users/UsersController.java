@@ -1,5 +1,6 @@
 package com.example.twitch_api.Users;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,6 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsersController {
     @Autowired
     private UserRepository _userRepository;
+
+    @GetMapping("/") 
+    public ResponseEntity<List<Users>> getAllUsers() {
+        List<Users> allUsers = _userRepository.findAll();
+
+        return ResponseEntity.status(200).body(allUsers);
+    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<Users> getUserByUserId(@PathVariable String userId) {
