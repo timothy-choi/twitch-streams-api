@@ -1,5 +1,6 @@
 package com.example.twitch_streams_api.demo.RecordedStreams;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ public interface RecordedStreamsRepository extends JpaRepository<RecordedStreams
     public RecordedStreams findByTwitchStreamId(String twitchStreamId);
 
     public RecordedStreams findByStreamTitle(String title);
+
+    public List<RecordedStreams> findByStreamHostUsername(String streamHostUsername);
 }

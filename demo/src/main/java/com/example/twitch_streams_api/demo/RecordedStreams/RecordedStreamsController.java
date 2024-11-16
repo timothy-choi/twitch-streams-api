@@ -1,6 +1,7 @@
 package com.example.twitch_streams_api.demo.RecordedStreams;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -49,6 +50,16 @@ public class RecordedStreamsController {
         RecordedStreams recordedStream = _recordedStreamsRepository.findByStreamTitle(streamTitle);
 
         if (recordedStream == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(recordedStream);
+    }
+
+    @GetMapping("/hostUsername/{hostUsername}")
+    public ResponseEntity<List<RecordedStreams>> getRecordedStreamsByStreamHostUsername(@PathVariable String hostUsername) {
+        List<RecordedStreams> recordedStream = _recordedStreamsRepository.findByStreamHostUsername(hostUsername);
+
+        if (recordedStream.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(recordedStream);
